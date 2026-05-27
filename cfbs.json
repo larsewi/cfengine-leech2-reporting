@@ -1,7 +1,7 @@
 {
   "name": "cfengine-leech2-reporting",
   "description": "Gives CFEngine Community users a hub-side reporting pipeline",
-  "type": "policy-set",
+  "type": "module",
   "git": true,
   "build": [
     {
@@ -18,5 +18,17 @@
         "copy ./ ./"
       ]
     }
-  ]
+  ],
+  "provides": {
+    "cfengine-leech2-reporting": {
+      "description": "Gives CFEngine Community users a hub-side reporting pipeline",
+      "tags": ["experimental"],
+      "subdirectory": "leech2",
+      "steps": [
+        "copy ./leech2.cf services/cfbs/leech2.cf",
+        "policy_files services/cfbs/leech2.cf",
+        "bundles leech2"
+      ]
+    }
+  }
 }

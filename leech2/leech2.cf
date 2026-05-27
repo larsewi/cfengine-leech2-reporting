@@ -1,0 +1,5 @@
+bundle agent leech2
+{
+  reports:
+    "Hello leech2!";
+}
