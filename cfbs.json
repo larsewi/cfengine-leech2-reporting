@@ -1,0 +1,7 @@
+{
+  "name": "cfengine-leech2-reporting",
+  "description": "Gives CFEngine Community users a hub-side reporting pipeline",
+  "type": "policy-set",
+  "git": true,
+  "build": []
+}
