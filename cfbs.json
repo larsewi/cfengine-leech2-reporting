@@ -3,6 +3,18 @@
   "description": "Gives CFEngine Community users a hub-side reporting pipeline",
   "type": "module",
   "git": true,
+  "provides": {
+    "cfengine-leech2-reporting": {
+      "description": "Gives CFEngine Community users a hub-side reporting pipeline",
+      "tags": ["experimental"],
+      "subdirectory": "leech2",
+      "steps": [
+        "copy ./leech2.cf services/cfbs/leech2.cf",
+        "policy_files services/cfbs/leech2.cf",
+        "bundles leech2"
+      ]
+    }
+  },
   "build": [
     {
       "name": "masterfiles",
@@ -17,18 +29,19 @@
         "run EXPLICIT_VERSION=3.27.1 EXPLICIT_RELEASE=1 ./prepare.sh -y",
         "copy ./ ./"
       ]
-    }
-  ],
-  "provides": {
-    "cfengine-leech2-reporting": {
+    },
+    {
+      "name": "cfengine-leech2-reporting",
       "description": "Gives CFEngine Community users a hub-side reporting pipeline",
-      "tags": ["experimental"],
+      "url": "https://github.com/larsewi/cfengine-leech2-reporting/",
+      "commit": "c600463b22896dbaf9ac407d0b6f99ad07cca32b",
       "subdirectory": "leech2",
+      "added_by": "cfbs add",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
         "policy_files services/cfbs/leech2.cf",
         "bundles leech2"
       ]
     }
-  }
+  ]
 }
