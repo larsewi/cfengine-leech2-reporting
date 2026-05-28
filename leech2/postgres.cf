@@ -5,9 +5,12 @@ body file control
 
 bundle edit_line leech2_pg_hba_include_dir
 {
+  delete_lines:
+    'include_dir "pg_hba.d"';
+
   insert_lines:
     'include_dir "pg_hba.d"'
-      location => before("host.*"),
+      location => start,
       comment  => "Bootstrap a pg_hba drop-in directory";
 }
 
