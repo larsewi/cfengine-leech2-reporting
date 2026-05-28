@@ -49,7 +49,20 @@ bundle agent leech2_install
         policy => "present";
 }
 
-bundle agent leech2_packages
+bundle agent leech2_postgres
+{
+  packages:
+    policy_server::
+      "postgresql"
+        policy => "present";
+
+  services:
+    policy_server::
+      "postgresql"
+        service_policy => "start";
+}
+
+bundle agent leech2_pgadmin
 {
   vars:
     policy_server::
@@ -59,6 +72,24 @@ bundle agent leech2_packages
         data => url_get("https://www.pgadmin.org/static/packages_pgadmin_org.pub", "{}");
       "pgadmin_repo_line"
         string => "deb [signed-by=$(pgadmin_key_path)] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(sys.os_release[VERSION_CODENAME]) pgadmin4 main";
+      "db_role"
+        string => "leech2";
+      "servers_json_path"
+        string => "/var/lib/pgadmin/cfbs-servers.json";
+      "servers_json"
+        string => '{"Servers":{"1":{"Name":"Local Postgres","Group":"Servers","Host":"localhost","Port":5432,"MaintenanceDB":"postgres","Username":"$(db_role)","SSLMode":"prefer"}}}';
+
+  classes:
+    policy_server::
+      "pgadmin_set_up"
+        expression => fileexists("/var/lib/pgadmin/pgadmin4.db");
+
+  vars:
+    policy_server.pgadmin_set_up::
+      "admin_email"
+        string => execresult(
+          "/usr/pgadmin4/venv/bin/python -c \"import sqlite3; print(sqlite3.connect('/var/lib/pgadmin/pgadmin4.db').execute('SELECT email FROM user LIMIT 1').fetchone()[0])\"",
+          "useshell");
 
   files:
     policy_server::
@@ -80,18 +111,24 @@ bundle agent leech2_packages
 
   packages:
     policy_server::
-      "postgresql"
-        policy => "present";
       "pgadmin4-web"
         policy => "present";
-
-  services:
-    policy_server::
-      "postgresql"
-        service_policy => "start";
 
   reports:
     policy_server::
       "pgAdmin is installed but not configured. Run: sudo /usr/pgadmin4/bin/setup-web.sh"
         unless => fileexists("/var/lib/pgadmin/pgadmin4.db");
+
+  files:
+    policy_server.pgadmin_set_up::
+      "$(servers_json_path)"
+        create  => "true",
+        content => "$(servers_json)",
+        perms   => mog("0644", "www-data", "www-data"),
+        classes => if_repaired("pgadmin_servers_changed");
+
+  commands:
+    policy_server.pgadmin_set_up.pgadmin_servers_changed::
+      "/usr/pgadmin4/venv/bin/python /usr/pgadmin4/web/setup.py load-servers $(servers_json_path) --user $(admin_email)"
+        contain => setuid_sh("www-data");
 }

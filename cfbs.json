@@ -12,8 +12,7 @@
         "copy ./leech2.cf services/cfbs/leech2.cf",
         "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
         "copy ./leech2_db.cf services/cfbs/leech2_db.cf",
-        "copy ./leech2_pgadmin.cf services/cfbs/leech2_pgadmin.cf",
-        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf services/cfbs/leech2_pgadmin.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf",
         "bundles leech2"
       ]
     }
@@ -41,8 +40,7 @@
         "copy ./leech2.cf services/cfbs/leech2.cf",
         "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
         "copy ./leech2_db.cf services/cfbs/leech2_db.cf",
-        "copy ./leech2_pgadmin.cf services/cfbs/leech2_pgadmin.cf",
-        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf services/cfbs/leech2_pgadmin.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf",
         "bundles leech2"
       ]
     }
