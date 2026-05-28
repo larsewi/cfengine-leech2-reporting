@@ -3,4 +3,8 @@ bundle agent leech2
   methods:
     "leech2_packages"
       usebundle => leech2_packages;
+    "leech2_db"
+      usebundle => leech2_db;
+    "leech2_pgadmin"
+      usebundle => leech2_pgadmin;
 }

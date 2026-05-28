@@ -1,0 +1,59 @@
+body file control
+{
+  evaluation_order => "top_down";
+}
+
+bundle edit_line leech2_pg_hba_include_dir
+{
+  insert_lines:
+    'include_dir "pg_hba.d"'
+      location => before("host.*"),
+      comment  => "Bootstrap a pg_hba drop-in directory";
+}
+
+bundle agent leech2_db
+{
+  vars:
+    policy_server::
+      "db_role"
+        string => "leech2";
+      "hba_file"
+        string => execresult(
+          "runuser -u postgres -- psql -tAc 'SHOW hba_file'",
+          "useshell");
+      "hba_dir"
+        string => dirname("$(hba_file)");
+
+  classes:
+    policy_server::
+      "leech2_role_exists"
+        expression => returnszero(
+          "runuser -u postgres -- psql -tAc \"SELECT 1 FROM pg_roles WHERE rolname='$(db_role)'\" | grep -q 1",
+          "useshell");
+
+  commands:
+    policy_server.!leech2_role_exists::
+      "psql -c \"CREATE ROLE $(db_role) LOGIN\""
+        contain => setuid_sh("postgres");
+
+  files:
+    policy_server::
+      "$(hba_dir)/pg_hba.d/."
+        create => "true",
+        perms  => mog("0750", "postgres", "postgres");
+
+      "$(hba_dir)/pg_hba.d/leech2.conf"
+        create  => "true",
+        content => "host all $(db_role) 127.0.0.1/32 trust$(const.n)",
+        perms   => mog("0640", "postgres", "postgres"),
+        classes => if_repaired("pg_hba_changed");
+
+      "$(hba_file)"
+        edit_line => leech2_pg_hba_include_dir,
+        classes   => if_repaired("pg_hba_changed");
+
+  services:
+    policy_server.pg_hba_changed::
+      "postgresql"
+        service_policy => "reload";
+}
