@@ -31,11 +31,8 @@
       ]
     },
     {
-      "name": "cfengine-leech2-reporting",
+      "name": "./leech2/",
       "description": "Gives CFEngine Community users a hub-side reporting pipeline",
-      "url": "https://github.com/larsewi/cfengine-leech2-reporting/",
-      "commit": "c600463b22896dbaf9ac407d0b6f99ad07cca32b",
-      "subdirectory": "leech2",
       "added_by": "cfbs add",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
