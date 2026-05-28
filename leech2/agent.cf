@@ -19,14 +19,18 @@ bundle agent leech2_agent
         slist  => variablesmatching(".*", "$(exclude_regex)");
       "var_names"
         slist  => difference("included", "excluded");
+      "tag_lists[$(var_names)]"
+        slist  => getvariablemetatags("$(var_names)");
+      "tags[$(var_names)]"
+        string => join(";", "tag_lists[$(var_names)]");
       "rows[$(var_names)]"
-        string => "$(var_names),$($(var_names))";
+        string => "$(var_names),$($(var_names)),$(tags[$(var_names)])";
       "csv_rows"
         slist  => getvalues("rows");
       "joined"
         string => join("$(const.n)", "csv_rows");
       "csv"
-        string => "name,value$(const.n)$(joined)$(const.n)";
+        string => "name,value,tags$(const.n)$(joined)$(const.n)";
 
   files:
     any::
