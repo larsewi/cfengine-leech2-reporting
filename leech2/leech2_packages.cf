@@ -1,12 +1,51 @@
+body file control
+{
+  evaluation_order => "top_down";
+}
+
 bundle agent leech2_packages
 {
+  vars:
+    policy_server::
+      "pgadmin_key_path"
+        string => "/usr/share/keyrings/packages-pgadmin-org.asc";
+      "pgadmin_key_response"
+        data => url_get("https://www.pgadmin.org/static/packages_pgadmin_org.pub", "{}");
+      "pgadmin_repo_line"
+        string => "deb [signed-by=$(pgadmin_key_path)] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(sys.os_release[VERSION_CODENAME]) pgadmin4 main";
+
+  files:
+    policy_server::
+      "$(pgadmin_key_path)"
+        create  => "true",
+        content => "$(pgadmin_key_response[content])",
+        perms   => mog("0644", "root", "root"),
+        classes => if_repaired("pgadmin_repo_changed");
+
+      "/etc/apt/sources.list.d/pgadmin4.list"
+        create    => "true",
+        edit_line => insert_lines("$(pgadmin_repo_line)"),
+        perms     => mog("0644", "root", "root"),
+        classes   => if_repaired("pgadmin_repo_changed");
+
+  commands:
+    policy_server.pgadmin_repo_changed::
+      "$(paths.path[apt_get]) update";
+
   packages:
     policy_server::
       "postgresql"
+        policy => "present";
+      "pgadmin4-web"
         policy => "present";
 
   services:
     policy_server::
       "postgresql"
         service_policy => "start";
+
+  reports:
+    policy_server::
+      "pgAdmin is installed but not configured. Run: sudo /usr/pgadmin4/bin/setup-web.sh"
+        unless => fileexists("/var/lib/pgadmin/pgadmin4.db");
 }
