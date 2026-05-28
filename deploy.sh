@@ -1,3 +1,4 @@
 #!/bin/bash
 
-cfbs build && cf-remote deploy
+cfbs build
+cf-remote deploy

@@ -10,7 +10,8 @@
       "subdirectory": "leech2",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
-        "policy_files services/cfbs/leech2.cf",
+        "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf",
         "bundles leech2"
       ]
     }
@@ -36,7 +37,8 @@
       "added_by": "cfbs add",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
-        "policy_files services/cfbs/leech2.cf",
+        "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf",
         "bundles leech2"
       ]
     }

@@ -1,5 +1,6 @@
 bundle agent leech2
 {
-  reports:
-    "Hello leech2!";
+  methods:
+    "leech2_packages"
+      usebundle => leech2_packages;
 }

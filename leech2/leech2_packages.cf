@@ -1,0 +1,12 @@
+bundle agent leech2_packages
+{
+  packages:
+    policy_server::
+      "postgresql"
+        policy => "present";
+
+  services:
+    policy_server::
+      "postgresql"
+        service_policy => "start";
+}
