@@ -3,6 +3,12 @@ body file control
   evaluation_order => "top_down";
 }
 
+body action quiet
+{
+  report_level => "error";
+  log_level    => "error";
+}
+
 bundle agent leech2_agent
 {
   vars:
@@ -45,5 +51,6 @@ bundle agent leech2_agent
 
       "$(workdir)/vars.csv"
         create  => "true",
-        content => "$(csv)";
+        content => "$(csv)",
+        action  => quiet;
 }
