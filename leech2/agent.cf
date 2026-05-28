@@ -11,6 +11,11 @@ body action quiet
 
 bundle agent leech2_agent
 {
+  classes:
+    any::
+      "patch_pending"
+        expression => fileexists("$(sys.statedir)/.leech2/PATCH");
+
   files:
     any::
       "$(sys.statedir)/.leech2/."
@@ -27,6 +32,10 @@ bundle agent leech2_agent
   commands:
     any::
       "LEECH2_LOG=info /usr/bin/lch -C $(sys.statedir) block create"
+        contain => in_shell;
+
+    any.!patch_pending::
+      "LEECH2_LOG=info /usr/bin/lch -C $(sys.statedir) patch create"
         contain => in_shell;
 }
 
