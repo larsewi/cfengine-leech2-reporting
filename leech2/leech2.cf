@@ -1,6 +1,8 @@
 bundle agent leech2
 {
   methods:
+    "leech2_install"
+      usebundle => leech2_install;
     "leech2_packages"
       usebundle => leech2_packages;
     "leech2_db"
