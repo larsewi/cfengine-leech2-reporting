@@ -1,0 +1,15 @@
+{
+  "tables": {
+    "vars": {
+      "fields": [
+        { "name": "name",  "type": "TEXT", "primary-key": true },
+        { "name": "value", "type": "TEXT" },
+        { "name": "tags",  "type": "TEXT" }
+      ],
+      "csv": {
+        "source": "vars.csv",
+        "header": true
+      }
+    }
+  }
+}

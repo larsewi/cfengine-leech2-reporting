@@ -11,10 +11,29 @@ body action quiet
 
 bundle agent leech2_agent
 {
+  files:
+    any::
+      "$(sys.statedir)/.leech2/."
+        create => "true";
+
+      "$(sys.statedir)/.leech2/config.json"
+        copy_from => local_dcp("$(sys.inputdir)/services/cfbs/config.json");
+
+  methods:
+    any::
+      "leech2_variables"
+        usebundle => leech2_variables;
+
+  commands:
+    any::
+      "LEECH2_LOG=info /usr/bin/lch -C $(sys.statedir) block create"
+        contain => in_shell;
+}
+
+bundle agent leech2_variables
+{
   vars:
     any::
-      "workdir"
-        string => "/var/cfengine/state/leech2";
       "include_regex"
         string => join("|", "default:def.metatags_include");
       "exclude_regex"
@@ -46,10 +65,7 @@ bundle agent leech2_agent
 
   files:
     any::
-      "$(workdir)/."
-        create => "true";
-
-      "$(workdir)/vars.csv"
+      "$(sys.statedir)/.leech2/vars.csv"
         create  => "true",
         content => "$(csv)",
         action  => quiet;

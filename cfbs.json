@@ -13,6 +13,7 @@
         "copy ./postgres.cf services/cfbs/postgres.cf",
         "copy ./pgadmin.cf services/cfbs/pgadmin.cf",
         "copy ./agent.cf services/cfbs/agent.cf",
+        "copy ./config.json services/cfbs/config.json",
         "policy_files services/cfbs/leech2.cf services/cfbs/postgres.cf services/cfbs/pgadmin.cf services/cfbs/agent.cf",
         "json ./def.json def.json",
         "bundles leech2_install leech2_postgres leech2_database leech2_pgadmin leech2_agent"
@@ -43,6 +44,7 @@
         "copy ./postgres.cf services/cfbs/postgres.cf",
         "copy ./pgadmin.cf services/cfbs/pgadmin.cf",
         "copy ./agent.cf services/cfbs/agent.cf",
+        "copy ./config.json services/cfbs/config.json",
         "policy_files services/cfbs/leech2.cf services/cfbs/postgres.cf services/cfbs/pgadmin.cf services/cfbs/agent.cf",
         "json ./def.json def.json",
         "bundles leech2_install leech2_postgres leech2_database leech2_pgadmin leech2_agent"
