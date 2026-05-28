@@ -55,6 +55,19 @@ bundle agent leech2_pgadmin
       "pgadmin4-web"
         policy => "present";
 
+  files:
+    policy_server::
+      "/etc/apache2/conf-enabled/leech2-pgadmin-redirect.conf"
+        create  => "true",
+        content => "RedirectMatch ^/$ /pgadmin4/$(const.n)",
+        perms   => mog("0644", "root", "root"),
+        classes => if_repaired("apache_redirect_changed");
+
+  services:
+    policy_server.apache_redirect_changed::
+      "apache2"
+        service_policy => "reload";
+
   reports:
     policy_server::
       "pgAdmin is installed but not configured. Run: sudo /usr/pgadmin4/bin/setup-web.sh"
