@@ -1,0 +1,6 @@
+{
+  "vars": {
+    "metatags_include": ["inventory", "report"],
+    "metatags_exclude": ["noreport"]
+  }
+}

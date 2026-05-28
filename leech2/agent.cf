@@ -1,0 +1,39 @@
+body file control
+{
+  evaluation_order => "top_down";
+}
+
+bundle agent leech2_agent
+{
+  vars:
+    any::
+      "workdir"
+        string => "/var/cfengine/state/leech2";
+      "include_regex"
+        string => join("|", "default:def.metatags_include");
+      "exclude_regex"
+        string => join("|", "default:def.metatags_exclude");
+      "included"
+        slist  => variablesmatching(".*", "$(include_regex)");
+      "excluded"
+        slist  => variablesmatching(".*", "$(exclude_regex)");
+      "var_names"
+        slist  => difference("included", "excluded");
+      "rows[$(var_names)]"
+        string => "$(var_names),$($(var_names))";
+      "csv_rows"
+        slist  => getvalues("rows");
+      "joined"
+        string => join("$(const.n)", "csv_rows");
+      "csv"
+        string => "name,value$(const.n)$(joined)$(const.n)";
+
+  files:
+    any::
+      "$(workdir)/."
+        create => "true";
+
+      "$(workdir)/vars.csv"
+        create  => "true",
+        content => "$(csv)";
+}
