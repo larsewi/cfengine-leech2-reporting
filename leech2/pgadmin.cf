@@ -3,65 +3,6 @@ body file control
   evaluation_order => "top_down";
 }
 
-bundle agent leech2_install
-{
-  vars:
-    any::
-      "version"  string => "5.0.0";
-      "base_url" string => "https://github.com/larsewi/leech2/releases/download/v$(version)";
-
-    debian.x86_64::
-      "arch" string => "amd64";
-    debian.aarch64::
-      "arch" string => "arm64";
-    redhat.x86_64::
-      "arch" string => "x86_64";
-    redhat.aarch64::
-      "arch" string => "aarch64";
-
-    debian::
-      "pkg"    string => "leech2_$(version)-1_$(arch).deb";
-      "method" string => "apt_get";
-    redhat::
-      "pkg"    string => "leech2-$(version)-1.$(arch).rpm";
-      "method" string => "yum|dnf";
-
-    (debian|redhat)::
-      "pkg_version" string => "$(version)-1";
-      "url"         string => "$(base_url)/$(pkg)";
-      "pkg_path"    string => "/tmp/$(pkg)";
-      "matches"
-        data => packagesmatching("leech2", "$(pkg_version)", "$(arch)", "$(method)");
-
-  classes:
-    (debian|redhat)::
-      "leech2_installed"
-        expression => isgreaterthan(length("matches"), 0);
-
-  commands:
-    (debian|redhat).!leech2_installed::
-      "curl -fsSL -o $(pkg_path) $(url)"
-        contain => in_shell;
-
-  packages:
-    (debian|redhat).!leech2_installed::
-      "$(pkg_path)"
-        policy => "present";
-}
-
-bundle agent leech2_postgres
-{
-  packages:
-    policy_server::
-      "postgresql"
-        policy => "present";
-
-  services:
-    policy_server::
-      "postgresql"
-        service_policy => "start";
-}
-
 bundle agent leech2_pgadmin
 {
   vars:

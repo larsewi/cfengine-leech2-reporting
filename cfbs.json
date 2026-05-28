@@ -10,10 +10,10 @@
       "subdirectory": "leech2",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
-        "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
-        "copy ./leech2_db.cf services/cfbs/leech2_db.cf",
-        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf",
-        "bundles leech2"
+        "copy ./postgres.cf services/cfbs/postgres.cf",
+        "copy ./pgadmin.cf services/cfbs/pgadmin.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/postgres.cf services/cfbs/pgadmin.cf",
+        "bundles leech2_install leech2_postgres leech2_database leech2_pgadmin"
       ]
     }
   },
@@ -38,10 +38,10 @@
       "added_by": "cfbs add",
       "steps": [
         "copy ./leech2.cf services/cfbs/leech2.cf",
-        "copy ./leech2_packages.cf services/cfbs/leech2_packages.cf",
-        "copy ./leech2_db.cf services/cfbs/leech2_db.cf",
-        "policy_files services/cfbs/leech2.cf services/cfbs/leech2_packages.cf services/cfbs/leech2_db.cf",
-        "bundles leech2"
+        "copy ./postgres.cf services/cfbs/postgres.cf",
+        "copy ./pgadmin.cf services/cfbs/pgadmin.cf",
+        "policy_files services/cfbs/leech2.cf services/cfbs/postgres.cf services/cfbs/pgadmin.cf",
+        "bundles leech2_install leech2_postgres leech2_database leech2_pgadmin"
       ]
     }
   ]

@@ -11,7 +11,20 @@ bundle edit_line leech2_pg_hba_include_dir
       comment  => "Bootstrap a pg_hba drop-in directory";
 }
 
-bundle agent leech2_db
+bundle agent leech2_postgres
+{
+  packages:
+    policy_server::
+      "postgresql"
+        policy => "present";
+
+  services:
+    policy_server::
+      "postgresql"
+        service_policy => "start";
+}
+
+bundle agent leech2_database
 {
   vars:
     policy_server::
