@@ -23,14 +23,20 @@ bundle agent leech2_agent
         slist  => getvariablemetatags("$(var_names)");
       "tags[$(var_names)]"
         string => join(";", "tag_lists[$(var_names)]");
+      "escaped_name[$(var_names)]"
+        string => string_replace("$(var_names)", "\"", "\"\"");
+      "escaped_value[$(var_names)]"
+        string => string_replace("$($(var_names))", "\"", "\"\"");
+      "escaped_tags[$(var_names)]"
+        string => string_replace("$(tags[$(var_names)])", "\"", "\"\"");
       "rows[$(var_names)]"
-        string => "$(var_names),$($(var_names)),$(tags[$(var_names)])";
+        string => "\"$(escaped_name[$(var_names)])\",\"$(escaped_value[$(var_names)])\",\"$(escaped_tags[$(var_names)])\"";
       "csv_rows"
         slist  => getvalues("rows");
       "joined"
         string => join("$(const.n)", "csv_rows");
       "csv"
-        string => "name,value,tags$(const.n)$(joined)$(const.n)";
+        string => "\"name\",\"value\",\"tags\"$(const.n)$(joined)$(const.n)";
 
   files:
     any::
